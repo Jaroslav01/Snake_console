@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
@@ -8,6 +8,9 @@ namespace Snake
     {
         int Heigth = 20;
         int Width = 80;
+
+        //int HeadX = 0;
+        //int HeadY = 0;
 
         int score = 0;
 
@@ -71,21 +74,46 @@ namespace Snake
                 key = keyInfo.KeyChar;
             }
         }
-        public void WritePoint(int x, int y)
+        public void Check_TP(int x, int y) // перевірка на дотик до краю
         {
-            if ((x == 1 || x >= Width +1) || (y == 1 || y >= Heigth +2))
-            //if (x >= Width +1 || y >= Heigth +2)
+            if (x == 0) // Дотик 
             {
-                Gamelouse = true;
-                Console.SetCursorPosition(90,8);
-                Console.WriteLine("YOU LOUSER");
-                
+                X[0] = Width; // Переміщення по координаті Х
             }
-            else
+            else if (x == Width + 1)
             {
+                X[0] = 1;
+            }
+            else if (y == 0)
+            {
+                Y[0] = Heigth; // Переміщення по координаті Y
+            }
+            else if (y == Heigth + 1)
+            {
+                Y[0] = 1;
+            }
+        }
+        public void WritePoint_snake(int x, int y)
+        {
+            
                 Console.SetCursorPosition(x, y);
+            //if (Y[0] == HeadY || X[0] == HeadY) 
+            //{
+                //Console.Write("*"); 
+            //}
+            //else
+            //{
                 Console.Write("#");
-            }
+            //}
+
+
+        }
+        public void WritePoint_fruit(int x, int y)
+        {
+            
+                Console.SetCursorPosition(x, y);
+                Console.Write("O");
+            
         }
         public void WriteScore(int x, int y)
         {
@@ -104,11 +132,14 @@ namespace Snake
                     fruitY = rnd.Next(2, (Heigth - 2));
                     score++;
                 }
-            }
+            } 
             for (int i = parts;i>1; i--)
             {
                 X[i - 1] = X[i - 2];
                 Y[i - 1] = Y[i - 2];
+                //X[i - 1] = HeadX;
+               // Y[i - 1] = HeadY;
+
             }
             switch (key)
             {
@@ -128,8 +159,9 @@ namespace Snake
             }
             for(int i = 0; i <= (parts - 1); i++)
             {
-                WritePoint(X[i], Y[i]);
-                WritePoint(fruitX, fruitY);
+                WritePoint_snake(X[i], Y[i]);
+                WritePoint_fruit(fruitX, fruitY);
+                Check_TP(X[i], Y[i]);
             }
             Thread.Sleep(100);
         }
