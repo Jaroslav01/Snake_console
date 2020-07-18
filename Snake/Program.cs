@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Globalization;
 
 namespace Snake
 {
@@ -13,7 +14,7 @@ namespace Snake
         //int HeadY = 0;
 
         int score = 0;
-
+        DateTime localDate = DateTime.Now;
         bool Gamelouse = false;
 
         int[] X = new int[50];
@@ -24,6 +25,9 @@ namespace Snake
 
         int parts = 3;
 
+        int timer_kay = 0;
+        int time_last = 0;
+
         ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
         char key = 'W';
 
@@ -31,6 +35,8 @@ namespace Snake
 
         
 
+        protected virtual bool DoubleBuffered { get; set; }
+        
         Snake()
         {
             X[0] = 5;
@@ -40,8 +46,88 @@ namespace Snake
             fruitY = rnd.Next(2, (Heigth - 2));
         }
 
-        public void WriteBoard()
+
+        bool wall_triger = true;
+        int x_wall = 0;
+        int y_wall = 0;
+        int direction = 0;
+        int size = 0;
+        public void TheWall()
         {
+            while (wall_triger == true)
+            {
+                wall_triger = false;
+
+                x_wall = rnd.Next(5, Width - 1);
+                y_wall = rnd.Next(5, Heigth-1);
+
+                direction = rnd.Next(0, 4);
+                size = rnd.Next(5, 20);
+                
+            }
+                switch (direction)
+                {
+                    case 0:
+                        for (int i = 0; i < size; i++)
+                        {
+                        if (x_wall+ i >= Heigth) { continue; }
+                        Console.SetCursorPosition(x_wall + i, y_wall);
+                        Console.Write("#");
+                        }
+                        break;
+
+                    case 1:
+                        for (int i = 0; i < size; i++)
+                        {
+                        if (x_wall - i <= 1) { continue; }
+                        Console.SetCursorPosition(x_wall - i, y_wall);
+                        Console.Write("#");
+                        }
+                        break;
+
+                    case 2:
+                        for (int i = 0; i < size; i++)
+                        {
+                        if (y_wall + i >= Width) { continue; }
+                        Console.SetCursorPosition(x_wall, y_wall + i);
+                            Console.Write("#");
+                        }
+                        break;
+
+                    case 3:
+                        for (int i = 0; i < size; i++)
+                        {
+                        if (y_wall - i <= 1) { continue; }
+                        Console.SetCursorPosition(x_wall, y_wall - i);
+                        Console.Write("#");
+                        }
+                        break;
+
+                }
+        }
+        public void Timer()
+        {
+            int x = 90;
+            int y = 10;
+
+            int timer_trigger = 0;
+            
+            while (timer_kay > timer_trigger)
+            {
+                time_last = localDate.Second;
+                timer_trigger++;
+                y = y + 2;
+                Console.SetCursorPosition(x,y);
+                Console.Write(localDate.Second - time_last);
+                y = y + 2;
+                break;
+                
+            }
+            
+        }
+
+            public void WriteBoard()
+            {
             Console.Clear();
             for(int i = 1; i <= (Width + 2); i++)
             {
@@ -96,14 +182,15 @@ namespace Snake
         public void WritePoint_snake(int x, int y)
         {
             
-                Console.SetCursorPosition(x, y);
+            Console.SetCursorPosition(x, y);
             //if (Y[0] == HeadY || X[0] == HeadY) 
             //{
-                //Console.Write("*"); 
+            //Console.Write("*"); 
             //}
             //else
             //{
-                Console.Write("#");
+            
+            Console.Write("#");
             //}
 
 
@@ -131,6 +218,10 @@ namespace Snake
                     fruitX = rnd.Next(2, (Width - 2));
                     fruitY = rnd.Next(2, (Heigth - 2));
                     score++;
+                    timer_kay++;
+                    wall_triger = true;
+                    //TheWall();
+
                 }
             } 
             for (int i = parts;i>1; i--)
@@ -162,9 +253,13 @@ namespace Snake
                 WritePoint_snake(X[i], Y[i]);
                 WritePoint_fruit(fruitX, fruitY);
                 Check_TP(X[i], Y[i]);
+                
+
             }
             Thread.Sleep(100);
         }
+
+
         static void Main(string[] args)
         {
 
@@ -172,8 +267,10 @@ namespace Snake
             while (snake.Gamelouse == false) {
                 snake.WriteBoard();
                 snake.WriteScore(90,5);
+                snake.TheWall();
                 snake.Input();
                 snake.Logic();
+                
             }
             Console.ReadKey();
 
