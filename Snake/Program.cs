@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Snake
 {
@@ -14,8 +15,7 @@ namespace Snake
         //int HeadX = 0;
         //int HeadY = 0;
 
-        int score = 0;
-        static DateTime localDate = DateTime.Now;
+        
 
         bool Gamelouse = false;
 
@@ -27,17 +27,15 @@ namespace Snake
 
         int parts = 3;
 
-        static int time_last = DateTime.Now.Second;
-        List<int> intList = new List<int>();
+
 
 
         ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
         char key = 'W';
 
         Random rnd = new Random();
-
+        static Stopwatch stopWatch = new Stopwatch();
         
-
         
         Snake()
         {
@@ -47,7 +45,6 @@ namespace Snake
             fruitX = rnd.Next(2, (Width - 2));
             fruitY = rnd.Next(2, (Heigth - 2));
         }
-
 
         bool wall_triger = true; // запускает вибор параметров стены
         int x_wall = 0;
@@ -105,27 +102,43 @@ namespace Snake
 
                 }
         }
+        
+            // Format and display the TimeSpan value.
+        
+        string[] time_score = new string[100];
+        TimeSpan ts = stopWatch.Elapsed;
 
         public void Timer()
         {
-            int[] time_score = new int[20];
-
+            
+            
+                for (int i = 0; i < parts-3; i++)
+                {
+                    
+                    time_score[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                    
+                }
+                
+                
+            
+            
             int x_timer = 90;
             int y_timer = 10;
-
-        /*    for (int i = 0; i < score; i++)
+            
+            for (int i = 0; i < parts - 3; i++)
             {
+                //time_score[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                Console.SetCursorPosition(x_timer, y_timer + i);
+                Console.Write($"{i+1} - Round - {time_score[i]}");
                 
+            }
 
-            }*/
+            string real_time = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            Console.SetCursorPosition(102,5);
+            Console.Write(real_time);
 
-            for (int i = 0; i < score; i++)
-                {
-                    time_score[i] = DateTime.Now.Second - time_last;
-                    Console.SetCursorPosition(x_timer, y_timer + i);
-                    Console.Write($"{i+1}-{time_score[i]}");
-                }
-             time_last = DateTime.Now.Second;;
         }
 
         public void WriteBoard()
@@ -196,7 +209,7 @@ namespace Snake
         public void WriteScore(int x, int y)
         {
             Console.SetCursorPosition(x, y);
-            Console.Write("SCORE: "+score);
+            Console.Write("SCORE: "+ parts);
         }
         
         public void Logic()
@@ -208,13 +221,11 @@ namespace Snake
                     parts++;
                     fruitX = rnd.Next(2, (Width - 2));
                     fruitY = rnd.Next(2, (Heigth - 2));
-                    
-                    time_last = DateTime.Now.Second;
-                    score++;
-                    
-                    
-                    
                     wall_triger = true;
+                    
+                    
+                    Timer();
+
                 }
             } 
             for (int i = parts;i>1; i--)
@@ -239,7 +250,12 @@ namespace Snake
                 case 'a':
                     X[0]--;
                     break;
-
+                case '+':
+                    parts++;
+                    break;
+                case '-':
+                    parts--;
+                    break;
             }
             for(int i = 0; i <= (parts - 1); i++)
             {
@@ -254,21 +270,26 @@ namespace Snake
 
         static void Main(string[] args)
         {
-           
+            stopWatch.Start();
+                
+    
+
             Snake snake = new Snake();
             while (snake.Gamelouse == false) {
-                Console.Write(DateTime.Now.Second - time_last);
-
+                //dConsole.Write(DateTime.Now.Second - time_last);
+                
                 snake.WriteBoard();
-                snake.WriteScore(90,5);
+                snake.WriteScore(90, 5);
+                stopWatch.Start();
                 snake.Timer();
                 snake.TheWall();
                 snake.Input();
                 snake.Logic();
                 
+                
             }
             Console.ReadKey();
-
+            
         }
     }
 }
