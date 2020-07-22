@@ -9,13 +9,14 @@ namespace Snake
 {
     class Snake
     {
+        Stopwatch StopWatch = new Stopwatch();
         int Heigth = 20;
         int Width = 80;
 
         //int HeadX = 0;
         //int HeadY = 0;
 
-        
+
 
         bool Gamelouse = false;
 
@@ -34,9 +35,9 @@ namespace Snake
         char key = 'W';
 
         Random rnd = new Random();
-        static Stopwatch stopWatch = new Stopwatch();
         
-        
+
+
         Snake()
         {
             X[0] = 5;
@@ -57,94 +58,96 @@ namespace Snake
             {
                 wall_triger = false;
                 x_wall = rnd.Next(5, Width - 1);
-                y_wall = rnd.Next(5, Heigth-1);
+                y_wall = rnd.Next(5, Heigth - 1);
                 direction = rnd.Next(0, 4);
                 size = rnd.Next(5, 20);
-                
+
             }
-                switch (direction)
-                {
-                    case 0:
-                        for (int i = 0; i < size && x_wall+i >= Heigth; i++)
-                        {
-                        
-                            Console.SetCursorPosition(x_wall + i, y_wall);
-                            Console.Write("#");
-                        }
-                        break;
+            switch (direction)
+            {
+                case 0:
+                    for (int i = 0; i < size && x_wall + i >= Heigth; i++)
+                    {
 
-                    case 1:
-                        for (int i = 0; i < size && x_wall - i >= Heigth;i++)
-                        {
-                        
-                            Console.SetCursorPosition(x_wall - i, y_wall);
-                            Console.Write("#");
-                        }
-                        break;
+                        Console.SetCursorPosition(x_wall + i, y_wall);
+                        Console.Write("#");
+                    }
+                    break;
 
-                    case 2:
-                        for (int i = 0; i < size && x_wall + i >= Width;i++)
-                        {
-                        
-                            Console.SetCursorPosition(x_wall, y_wall + i);
-                            Console.Write("#");
-                        }
-                        break;
+                case 1:
+                    for (int i = 0; i < size && x_wall - i >= Heigth; i++)
+                    {
 
-                    case 3:
-                        for (int i = 0; i < size && x_wall - i >= Width;i++)
-                        {
-                        
-                            Console.SetCursorPosition(x_wall, y_wall - i);
-                            Console.Write("#");
-                        }
-                        break;
+                        Console.SetCursorPosition(x_wall - i, y_wall);
+                        Console.Write("#");
+                    }
+                    break;
 
-                }
+                case 2:
+                    for (int i = 0; i < size && x_wall + i >= Width; i++)
+                    {
+
+                        Console.SetCursorPosition(x_wall, y_wall + i);
+                        Console.Write("#");
+                    }
+                    break;
+
+                case 3:
+                    for (int i = 0; i < size && x_wall - i >= Width; i++)
+                    {
+
+                        Console.SetCursorPosition(x_wall, y_wall - i);
+                        Console.Write("#");
+                    }
+                    break;
+
+            }
         }
-        
-            // Format and display the TimeSpan value.
-        
-        string[] time_score = new string[100];
-        TimeSpan ts = stopWatch.Elapsed;
 
+        // Format and display the TimeSpan value.
+
+        string[] time_history = new string[50];
+
+  
         public void Timer()
         {
+           
             
+
+            // Thread.Sleep(1000);
             
-                for (int i = 0; i < parts-3; i++)
-                {
-                    
-                    time_score[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                    
-                }
-                
-                
-            
-            
-            int x_timer = 90;
-            int y_timer = 10;
-            
-            for (int i = 0; i < parts - 3; i++)
+           for (int i = 3; i < parts; i++)
             {
-                //time_score[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                Console.SetCursorPosition(x_timer, y_timer + i);
-                Console.Write($"{i+1} - Round - {time_score[i]}");
+                Console.Write(i);
                 
+                //if (i+1 < i) continue;
+                TimeSpan ts = StopWatch.Elapsed;
+                time_history[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
+                Console.Write(time_history);
             }
 
-            string real_time = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10);
-            Console.SetCursorPosition(102,5);
-            Console.Write(real_time);
 
+            for (int i = 3; i < parts; i++)
+            {
+                Console.SetCursorPosition(90,8+i);
+                Console.Write($"{i+1} - {time_history[i]}");
+                
+            }
+            /*
+            Console.SetCursorPosition(95,5);
+            Console.Write(String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10));
+            /*
+        Console.SetCursorPosition(98, 5);
+        Console.Write($"{ + 1} - {time_history}");
+            */
         }
 
         public void WriteBoard()
-       {
+        {
             Console.Clear();
-            for(int i = 1; i <= (Width + 2); i++)
+            for (int i = 1; i <= (Width + 2); i++)
             {
                 Console.SetCursorPosition(i, 1);
                 Console.Write("-");
@@ -202,38 +205,38 @@ namespace Snake
         }
         public void WritePoint_fruit(int x, int y)
         {
-                Console.SetCursorPosition(x, y);
-                Console.Write("O");
-            
+            Console.SetCursorPosition(x, y);
+            Console.Write("O");
+
         }
         public void WriteScore(int x, int y)
         {
             Console.SetCursorPosition(x, y);
-            Console.Write("SCORE: "+ parts);
+            Console.Write("SCORE: " + parts);
         }
-        
+
         public void Logic()
         {
-            if(X[0] == fruitX)
+            if (X[0] == fruitX)
             {
-                if(Y[0] == fruitY)
+                if (Y[0] == fruitY)
                 {
                     parts++;
                     fruitX = rnd.Next(2, (Width - 2));
                     fruitY = rnd.Next(2, (Heigth - 2));
                     wall_triger = true;
-                    
-                    
                     Timer();
+                    StopWatch.Restart();
+
 
                 }
-            } 
-            for (int i = parts;i>1; i--)
+            }
+            for (int i = parts; i > 1; i--)
             {
                 X[i - 1] = X[i - 2];
                 Y[i - 1] = Y[i - 2];
                 //X[i - 1] = HeadX;
-               // Y[i - 1] = HeadY;
+                // Y[i - 1] = HeadY;
 
             }
             switch (key)
@@ -257,12 +260,12 @@ namespace Snake
                     parts--;
                     break;
             }
-            for(int i = 0; i <= (parts - 1); i++)
+            for (int i = 0; i <= (parts - 1); i++)
             {
                 WritePoint_snake(X[i], Y[i]);
                 WritePoint_fruit(fruitX, fruitY);
                 Check_TP(X[i], Y[i]);
-                
+
 
             }
             Thread.Sleep(100);
@@ -270,26 +273,28 @@ namespace Snake
 
         static void Main(string[] args)
         {
-            stopWatch.Start();
-                
-    
+            
+
+
 
             Snake snake = new Snake();
-            while (snake.Gamelouse == false) {
+            while (snake.Gamelouse == false)
+            {
                 //dConsole.Write(DateTime.Now.Second - time_last);
-                
+
                 snake.WriteBoard();
-                snake.WriteScore(90, 5);
-                stopWatch.Start();
                 snake.Timer();
+                snake.WriteScore(90, 5);
+
+                
                 snake.TheWall();
                 snake.Input();
                 snake.Logic();
-                
-                
+
+
             }
             Console.ReadKey();
-            
+
         }
     }
 }
