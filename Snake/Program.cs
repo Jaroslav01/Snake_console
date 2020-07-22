@@ -106,19 +106,18 @@ namespace Snake
 
         public void Timer()
         {
+            /*
             foreach (var value in time_history)
             {
                 Console.Write(value);
             }
+            */
 
             for (int i = 3; i < parts; i++)
             {
-                Console.Write(i);
-                
-                //if (i+1 < i) continue;
+                //Console.Write(i);
                 TimeSpan ts = StopWatch.Elapsed;
                 time_history[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
-                //Console.Write(time_history);
                 Console.Write(String.Join(Environment.NewLine, time_history[19]));
             }
 
