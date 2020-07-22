@@ -61,7 +61,6 @@ namespace Snake
                 y_wall = rnd.Next(5, Heigth - 1);
                 direction = rnd.Next(0, 4);
                 size = rnd.Next(5, 20);
-
             }
             switch (direction)
             {
@@ -100,30 +99,27 @@ namespace Snake
                         Console.Write("#");
                     }
                     break;
-
             }
         }
 
-        // Format and display the TimeSpan value.
-
         string[] time_history = new string[50];
 
-  
         public void Timer()
         {
-           
-            
+            foreach (var value in time_history)
+            {
+                Console.Write(value);
+            }
 
-            // Thread.Sleep(1000);
-            
-           for (int i = 3; i < parts; i++)
+            for (int i = 3; i < parts; i++)
             {
                 Console.Write(i);
                 
                 //if (i+1 < i) continue;
                 TimeSpan ts = StopWatch.Elapsed;
                 time_history[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
-                Console.Write(time_history);
+                //Console.Write(time_history);
+                Console.Write(String.Join(Environment.NewLine, time_history[19]));
             }
 
 
