@@ -163,18 +163,6 @@ namespace Snake
             Console.SetCursorPosition(x, y);
             Console.Write("#");
         }
-        public void WritePoint_fruit(int x, int y)
-        {
-            Console.SetCursorPosition(x, y);
-            Console.Write("O");
-
-        }
-        public void WriteScore(int x, int y)
-        {
-            Console.SetCursorPosition(x, y);
-            Console.Write("SCORE: " + parts);
-        }
-
         public void Logic()
         {
             if (X[0] == fruitX)
@@ -222,20 +210,24 @@ namespace Snake
             for (int i = 0; i <= (parts - 1); i++)
             {
                 WritePoint_snake(X[i], Y[i]);
-                WritePoint_fruit(fruitX, fruitY);
+                draw(fruitX, fruitY,"O");
                 Check_TP(X[i], Y[i]);
             }
-            //Thread.Sleep(100);
+            Thread.Sleep(100);
         }
-        public void draw()
+        public void draw(int x,int y,string symbol)
         {
+            Console.SetCursorPosition(x, y);
+            Console.Write(symbol);
+            /*
             for (int i = 0; i < parts; i++)
             {
                 Console.SetCursorPosition(90, 8 + i);
                 Console.Write($"{i + 1} - {time_history[i]}");
                 
             }
-            Thread.Sleep(100);
+            */
+            //Thread.Sleep(100);
         }
         static void Main(string[] args)
         {
@@ -246,8 +238,8 @@ namespace Snake
                 // в дроу
                 snake.Input();
                 snake.Logic();
-                snake.draw();
-                snake.WriteScore(90, 5); 
+                
+                snake.draw(90, 5,$"SCORE: {snake.score}"); 
                 snake.TheWall();
                 //виписать елементи отрисовки в дров
             }
