@@ -12,7 +12,7 @@ namespace Snake
         Stopwatch StopWatch = new Stopwatch();
         int Heigth = 20;
         int Width = 80;
-
+        int score = 0;
         //int HeadX = 0;
         //int HeadY = 0;
 
@@ -107,36 +107,15 @@ namespace Snake
         public void Timer()
         {
             /*
-            foreach (var value in time_history)
-            {
-                Console.Write(value);
-            }
-            */
-
             for (int i = 3; i < parts; i++)
             {
                 //Console.Write(i);
-                TimeSpan ts = StopWatch.Elapsed;
-                time_history[i] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
-                Console.Write(String.Join(Environment.NewLine, time_history[19]));
-            }
-
-
-            for (int i = 3; i < parts; i++)
-            {
-                Console.SetCursorPosition(90,8+i);
-                Console.Write($"{i+1} - {time_history[i]}");
                 
-            }
-            /*
-            Console.SetCursorPosition(95,5);
-            Console.Write(String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10));
-            /*
-        Console.SetCursorPosition(98, 5);
-        Console.Write($"{ + 1} - {time_history}");
+            } // почему?
             */
+            TimeSpan ts = StopWatch.Elapsed;
+            time_history[score] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
+            Console.Write(String.Join(Environment.NewLine, time_history[19]));
         }
 
         public void WriteBoard()
@@ -217,6 +196,7 @@ namespace Snake
                 if (Y[0] == fruitY)
                 {
                     parts++;
+                    score++;
                     fruitX = rnd.Next(2, (Width - 2));
                     fruitY = rnd.Next(2, (Heigth - 2));
                     wall_triger = true;
@@ -263,9 +243,18 @@ namespace Snake
 
 
             }
+            //Thread.Sleep(100);
+        }
+        public void draw()
+        {
+            for (int i = 0; i < parts; i++)
+            {
+                Console.SetCursorPosition(90, 8 + i);
+                Console.Write($"{i + 1} - {time_history[i]}");
+                
+            }
             Thread.Sleep(100);
         }
-
         static void Main(string[] args)
         {
             
@@ -278,14 +267,19 @@ namespace Snake
                 //dConsole.Write(DateTime.Now.Second - time_last);
 
                 snake.WriteBoard();
-                snake.Timer();
-                snake.WriteScore(90, 5);
-
                 
-                snake.TheWall();
+                
+
+                // в дроу
+                
                 snake.Input();
                 snake.Logic();
-
+                snake.draw();
+                snake.WriteScore(90, 5); 
+                snake.TheWall();
+                
+                
+                //виписать елементи отрисовки в дров
 
             }
             Console.ReadKey();
