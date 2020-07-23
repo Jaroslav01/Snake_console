@@ -15,29 +15,15 @@ namespace Snake
         int score = 0;
         //int HeadX = 0;
         //int HeadY = 0;
-
-
-
         bool Gamelouse = false;
-
         int[] X = new int[50];
         int[] Y = new int[50];
-
         int fruitX;
         int fruitY;
-
         int parts = 3;
-
-
-
-
         ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
         char key = 'W';
-
         Random rnd = new Random();
-        
-
-
         Snake()
         {
             X[0] = 5;
@@ -141,7 +127,6 @@ namespace Snake
                 Console.SetCursorPosition((Width + 2), i);
                 Console.Write("|");
             }
-
         }
 
         public void Input()
@@ -172,6 +157,7 @@ namespace Snake
                 Y[0] = 1;
             }
         }
+
         public void WritePoint_snake(int x, int y)
         {
             Console.SetCursorPosition(x, y);
@@ -202,8 +188,6 @@ namespace Snake
                     wall_triger = true;
                     Timer();
                     StopWatch.Restart();
-
-
                 }
             }
             for (int i = parts; i > 1; i--)
@@ -240,8 +224,6 @@ namespace Snake
                 WritePoint_snake(X[i], Y[i]);
                 WritePoint_fruit(fruitX, fruitY);
                 Check_TP(X[i], Y[i]);
-
-
             }
             //Thread.Sleep(100);
         }
@@ -257,33 +239,19 @@ namespace Snake
         }
         static void Main(string[] args)
         {
-            
-
-
-
             Snake snake = new Snake();
             while (snake.Gamelouse == false)
             {
-                //dConsole.Write(DateTime.Now.Second - time_last);
-
                 snake.WriteBoard();
-                
-                
-
                 // в дроу
-                
                 snake.Input();
                 snake.Logic();
                 snake.draw();
                 snake.WriteScore(90, 5); 
                 snake.TheWall();
-                
-                
                 //виписать елементи отрисовки в дров
-
             }
             Console.ReadKey();
-
         }
     }
 }
