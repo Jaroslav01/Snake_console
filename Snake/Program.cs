@@ -109,23 +109,27 @@ namespace Snake
             Console.Clear();
             for (int i = 1; i <= (Width + 2); i++)
             {
-                Console.SetCursorPosition(i, 1);
-                Console.Write("-");
+                //Console.SetCursorPosition(i, 1);
+                //Console.Write("-");
+                draw(i, 1, "-");
             }
             for (int i = 1; i <= (Width + 2); i++)
             {
-                Console.SetCursorPosition(i, (Heigth + 2));
-                Console.Write("-");
+                //Console.SetCursorPosition(i, (Heigth + 2));
+                //Console.Write("-");
+                draw(i, (Heigth + 2), "-");
             }
             for (int i = 1; i <= (Heigth + 1); i++)
             {
-                Console.SetCursorPosition(1, i);
-                Console.Write("|");
+                //Console.SetCursorPosition(1, i);
+                //Console.Write("|");
+                draw(1, i, "|");
             }
             for (int i = 1; i <= (Heigth + 1); i++)
             {
-                Console.SetCursorPosition((Width + 2), i);
-                Console.Write("|");
+                //Console.SetCursorPosition((Width + 2), i);
+                //Console.Write("|");
+                draw((Width + 2), i, "|");
             }
         }
 
