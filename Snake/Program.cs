@@ -4,17 +4,15 @@ using System.Threading;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 namespace Snake
 {
     class Snake
     {
         Stopwatch StopWatch = new Stopwatch();
+        string[] time_history = new string[50];
         int Heigth = 20;
         int Width = 80;
         int score = 0;
-        //int HeadX = 0;
-        //int HeadY = 0;
         bool Gamelouse = false;
         int[] X = new int[50];
         int[] Y = new int[50];
@@ -52,87 +50,36 @@ namespace Snake
             {
                 case 0:
                     for (int i = 0; i < size && x_wall + i >= Heigth; i++)
-                    {
-
-                        Console.SetCursorPosition(x_wall + i, y_wall);
-                        Console.Write("#");
+                    { 
+                        draw(x_wall + i, y_wall, "#");
                     }
                     break;
-
                 case 1:
                     for (int i = 0; i < size && x_wall - i >= Heigth; i++)
                     {
-
-                        Console.SetCursorPosition(x_wall - i, y_wall);
-                        Console.Write("#");
+                        draw(x_wall - i, y_wall, "#");
                     }
                     break;
-
                 case 2:
                     for (int i = 0; i < size && x_wall + i >= Width; i++)
                     {
-
-                        Console.SetCursorPosition(x_wall, y_wall + i);
-                        Console.Write("#");
+                        draw(x_wall, y_wall + i, "#");
                     }
                     break;
-
                 case 3:
                     for (int i = 0; i < size && x_wall - i >= Width; i++)
                     {
-
-                        Console.SetCursorPosition(x_wall, y_wall - i);
-                        Console.Write("#");
+                        draw(x_wall, y_wall - i, "#");
                     }
                     break;
             }
         }
-
-        string[] time_history = new string[50];
-
         public void Timer()
         {
-            /*
-            for (int i = 3; i < parts; i++)
-            {
-                //Console.Write(i);
-                
-            } // почему?
-            */
             TimeSpan ts = StopWatch.Elapsed;
             time_history[score] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
             Console.Write(String.Join(Environment.NewLine, time_history[19]));
         }
-
-        public void WriteBoard()
-        {
-            Console.Clear();
-            for (int i = 1; i <= (Width + 2); i++)
-            {
-                //Console.SetCursorPosition(i, 1);
-                //Console.Write("-");
-                draw(i, 1, "-");
-            }
-            for (int i = 1; i <= (Width + 2); i++)
-            {
-                //Console.SetCursorPosition(i, (Heigth + 2));
-                //Console.Write("-");
-                draw(i, (Heigth + 2), "-");
-            }
-            for (int i = 1; i <= (Heigth + 1); i++)
-            {
-                //Console.SetCursorPosition(1, i);
-                //Console.Write("|");
-                draw(1, i, "|");
-            }
-            for (int i = 1; i <= (Heigth + 1); i++)
-            {
-                //Console.SetCursorPosition((Width + 2), i);
-                //Console.Write("|");
-                draw((Width + 2), i, "|");
-            }
-        }
-
         public void Input()
         {
             if (Console.KeyAvailable)
@@ -141,7 +88,6 @@ namespace Snake
                 key = keyInfo.KeyChar;
             }
         }
-
         public void Check_TP(int x, int y) // перевірка на дотик до краю
         {
             if (x == 0) // Дотик 
@@ -161,7 +107,6 @@ namespace Snake
                 Y[0] = 1;
             }
         }
-
         public void WritePoint_snake(int x, int y)
         {
             Console.SetCursorPosition(x, y);
@@ -169,6 +114,23 @@ namespace Snake
         }
         public void Logic()
         {
+            Console.Clear();
+            for (int i = 1; i <= (Width + 2); i++)
+            {
+                draw(i, 1, "-");
+            }
+            for (int i = 1; i <= (Width + 2); i++)
+            {
+                draw(i, (Heigth + 2), "-");
+            }
+            for (int i = 1; i <= (Heigth + 1); i++)
+            {
+                draw(1, i, "|");
+            }
+            for (int i = 1; i <= (Heigth + 1); i++)
+            {
+                draw((Width + 2), i, "|");
+            }
             if (X[0] == fruitX)
             {
                 if (Y[0] == fruitY)
@@ -186,9 +148,6 @@ namespace Snake
             {
                 X[i - 1] = X[i - 2];
                 Y[i - 1] = Y[i - 2];
-                //X[i - 1] = HeadX;
-                // Y[i - 1] = HeadY;
-
             }
             switch (key)
             {
@@ -217,35 +176,26 @@ namespace Snake
                 draw(fruitX, fruitY,"O");
                 Check_TP(X[i], Y[i]);
             }
+            for (int i = 0; i < parts; i++)
+            {
+                draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
+            }
+            draw(90, 5, $"SCORE: {score}");
             Thread.Sleep(100);
         }
         public void draw(int x,int y,string symbol)
         {
             Console.SetCursorPosition(x, y);
             Console.Write(symbol);
-            /*
-            for (int i = 0; i < parts; i++)
-            {
-                Console.SetCursorPosition(90, 8 + i);
-                Console.Write($"{i + 1} - {time_history[i]}");
-                
-            }
-            */
-            //Thread.Sleep(100);
         }
         static void Main(string[] args)
         {
             Snake snake = new Snake();
             while (snake.Gamelouse == false)
             {
-                snake.WriteBoard();
-                // в дроу
                 snake.Input();
                 snake.Logic();
-                
-                snake.draw(90, 5,$"SCORE: {snake.score}"); 
                 snake.TheWall();
-                //виписать елементи отрисовки в дров
             }
             Console.ReadKey();
         }
