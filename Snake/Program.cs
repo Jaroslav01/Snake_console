@@ -9,19 +9,24 @@ namespace Snake
     class Snake
     {
         Stopwatch StopWatch = new Stopwatch();
+        ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
+        Random rnd = new Random();
         string[] time_history = new string[50];
+        bool Gamelouse = false;
         int Heigth = 20;
         int Width = 80;
         int score = 0;
-        bool Gamelouse = false;
         int[] X = new int[50];
         int[] Y = new int[50];
+        bool wall_triger = true; // запускает вибор параметров стены
+        int x_wall = 0;
+        int y_wall = 0;
+        int direction = 0; // Направление
+        int size = 0; // Длина стены
         int fruitX;
         int fruitY;
         int parts = 3;
-        ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
         char key = 'W';
-        Random rnd = new Random();
         Snake()
         {
             X[0] = 5;
@@ -30,12 +35,6 @@ namespace Snake
             fruitX = rnd.Next(2, (Width - 2));
             fruitY = rnd.Next(2, (Heigth - 2));
         }
-
-        bool wall_triger = true; // запускает вибор параметров стены
-        int x_wall = 0;
-        int y_wall = 0;
-        int direction = 0; // Направление
-        int size = 0; // Длина стены
         public void TheWall()
         {
             while (wall_triger == true)
@@ -77,22 +76,24 @@ namespace Snake
         public void Timer()
         {
             TimeSpan ts = StopWatch.Elapsed;
-            time_history[score] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
+            time_history[score-1] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
             Console.Write(String.Join(Environment.NewLine, time_history[19]));
         }
-        public void Input()
+        public void Timer_draw_and_score() 
         {
-            if (Console.KeyAvailable)
+            TimeSpan ts = StopWatch.Elapsed;
+            for (int i = 0; i < score; i++)
             {
-                keyInfo = Console.ReadKey(true);
-                key = keyInfo.KeyChar;
+                draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
             }
+            draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
+            draw(90, 5, $"SCORE: {score}");
         }
-        public void Check_TP(int x, int y) // перевірка на дотик до краю
+        public void Check_TP(int x, int y) // check border touch
         {
-            if (x == 0) // Дотик 
+            if (x == 0) 
             {
-                X[0] = Width; // Переміщення по координаті Х
+                X[0] = Width;
             }
             else if (x == Width + 1)
             {
@@ -100,55 +101,15 @@ namespace Snake
             }
             else if (y == 0)
             {
-                Y[0] = Heigth; // Переміщення по координаті Y
+                Y[0] = Heigth;
             }
             else if (y == Heigth + 1)
             {
                 Y[0] = 1;
             }
         }
-        public void WritePoint_snake(int x, int y)
+        public void Key_press()
         {
-            Console.SetCursorPosition(x, y);
-            Console.Write("#");
-        }
-        public void Logic()
-        {
-            Console.Clear();
-            for (int i = 1; i <= (Width + 2); i++)
-            {
-                draw(i, 1, "-");
-            }
-            for (int i = 1; i <= (Width + 2); i++)
-            {
-                draw(i, (Heigth + 2), "-");
-            }
-            for (int i = 1; i <= (Heigth + 1); i++)
-            {
-                draw(1, i, "|");
-            }
-            for (int i = 1; i <= (Heigth + 1); i++)
-            {
-                draw((Width + 2), i, "|");
-            }
-            if (X[0] == fruitX)
-            {
-                if (Y[0] == fruitY)
-                {
-                    parts++;
-                    score++;
-                    fruitX = rnd.Next(2, (Width - 2));
-                    fruitY = rnd.Next(2, (Heigth - 2));
-                    wall_triger = true;
-                    Timer();
-                    StopWatch.Restart();
-                }
-            }
-            for (int i = parts; i > 1; i--)
-            {
-                X[i - 1] = X[i - 2];
-                Y[i - 1] = Y[i - 2];
-            }
             switch (key)
             {
                 case 'w':
@@ -170,17 +131,77 @@ namespace Snake
                     parts--;
                     break;
             }
+        }
+        public void Map_border()
+        {
+            for (int i = 1; i <= (Width + 2); i++)
+            {
+                draw(i, 1, "-");
+            }
+            for (int i = 1; i <= (Width + 2); i++)
+            {
+                draw(i, (Heigth + 2), "-");
+            }
+            for (int i = 1; i <= (Heigth + 1); i++)
+            {
+                draw(1, i, "|");
+            }
+            for (int i = 1; i <= (Heigth + 1); i++)
+            {
+                draw((Width + 2), i, "|");
+            }
+        }
+        public void Fruit()
+        {
+            if (X[0] == fruitX)
+            {
+                if (Y[0] == fruitY)
+                {
+                    parts++;
+                    score++;
+                    fruitX = rnd.Next(2, (Width - 2));
+                    fruitY = rnd.Next(2, (Heigth - 2));
+                    wall_triger = true;
+                    Timer();
+                    StopWatch.Restart();
+                }
+            }
+        }
+        public void Input()
+        {
+            if (Console.KeyAvailable)
+            {
+                keyInfo = Console.ReadKey(true);
+                key = keyInfo.KeyChar;
+            }
+        }
+        public void Snake_parts_and_move()
+        {
+            for (int i = parts; i > 1; i--)
+            {
+                X[i - 1] = X[i - 2];
+                Y[i - 1] = Y[i - 2];
+            }
+        }
+        public void Snake_fruit_TP_draw()
+        {
             for (int i = 0; i <= (parts - 1); i++)
             {
-                WritePoint_snake(X[i], Y[i]);
-                draw(fruitX, fruitY,"O");
+                draw(X[i], Y[i], "#");
+                draw(fruitX, fruitY, "O");
                 Check_TP(X[i], Y[i]);
             }
-            for (int i = 0; i < parts; i++)
-            {
-                draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
-            }
-            draw(90, 5, $"SCORE: {score}");
+        }
+        public void Logic()
+        {
+            Console.Clear();
+            StopWatch.Start();
+            Map_border();
+            Fruit();
+            Snake_parts_and_move();
+            Key_press();
+            Snake_fruit_TP_draw();
+            Timer_draw_and_score();
             Thread.Sleep(100);
         }
         public void draw(int x,int y,string symbol)
