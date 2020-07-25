@@ -1,5 +1,8 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Globalization;
+using System.Collections.Generic;
 using System.Diagnostics;
 namespace Snake
 {
@@ -9,9 +12,9 @@ namespace Snake
         ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
         Random rnd = new Random();
         string[] time_history = new string[50];
-        bool gamelouse = false;
-        int heigth = 20;
-        int width = 80;
+        bool Gamelouse = false;
+        int Heigth = 20;
+        int Width = 80;
         int score = 0;
         int[] X = new int[50];
         int[] Y = new int[50];
@@ -29,43 +32,43 @@ namespace Snake
             X[0] = 5;
             Y[0] = 5;
             Console.CursorVisible = false;
-            fruitX = rnd.Next(2, (width - 2));
-            fruitY = rnd.Next(2, (heigth - 2));
+            fruitX = rnd.Next(2, (Width - 2));
+            fruitY = rnd.Next(2, (Heigth - 2));
         }
         public void TheWall()
         {
             while (wall_triger == true)
             {
                 wall_triger = false;
-                x_wall = rnd.Next(5, width - 1);
-                y_wall = rnd.Next(5, heigth - 1);
+                x_wall = rnd.Next(5, Width - 1);
+                y_wall = rnd.Next(5, Heigth - 1);
                 direction = rnd.Next(0, 4);
                 size = rnd.Next(5, 20);
             }
             switch (direction)
             {
                 case 0:
-                    for (int i = 0; i < size && x_wall + i >= heigth; i++)
-                    { 
-                        Draw(x_wall + i, y_wall, "#");
+                    for (int i = 0; i < size && x_wall + i >= Heigth; i++)
+                    {
+                        draw(x_wall + i, y_wall, "#");
                     }
                     break;
                 case 1:
-                    for (int i = 0; i < size && x_wall - i >= heigth; i++)
+                    for (int i = 0; i < size && x_wall - i >= Heigth; i++)
                     {
-                        Draw(x_wall - i, y_wall, "#");
+                        draw(x_wall - i, y_wall, "#");
                     }
                     break;
                 case 2:
-                    for (int i = 0; i < size && x_wall + i >= width; i++)
+                    for (int i = 0; i < size && x_wall + i >= Width; i++)
                     {
-                        Draw(x_wall, y_wall + i, "#");
+                        draw(x_wall, y_wall + i, "#");
                     }
                     break;
                 case 3:
-                    for (int i = 0; i < size && x_wall - i >= width; i++)
+                    for (int i = 0; i < size && x_wall - i >= Width; i++)
                     {
-                        Draw(x_wall, y_wall - i, "#");
+                        draw(x_wall, y_wall - i, "#");
                     }
                     break;
             }
@@ -73,79 +76,36 @@ namespace Snake
         public void Timer()
         {
             TimeSpan ts = StopWatch.Elapsed;
-            time_history[score-1] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
-            Console.Write(String.Join(Environment.NewLine, time_history[19]));
-            StopWatch.Restart();
+            int score_local = score;
+            time_history[score_local - 1] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
         }
         public void TimerDrawAndScore()
         {
             TimeSpan ts = StopWatch.Elapsed;
             for (int i = 0; i < score; i++)
             {
-                Draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
+                draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
             }
-            Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
-            Draw(90, 5, $"SCORE: {score}");
+            draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
+            draw(90, 5, $"SCORE: {score}");
         }
-        public void CheckTp(int x, int y) // check border touch
+        public void Check_TP(int x, int y) // check border touch
         {
-            if (x == 0) 
+            if (x == 0)
             {
-                X[0] = width;
+                X[0] = Width;
             }
-            else if (x == width + 1)
+            else if (x == Width + 1)
             {
                 X[0] = 1;
             }
             else if (y == 0)
             {
-                Y[0] = heigth;
+                Y[0] = Heigth;
             }
-            else if (y == heigth + 1)
+            else if (y == Heigth + 1)
             {
                 Y[0] = 1;
-            }
-        }
-        public void MapBorder()
-        {
-            for (int i = 1; i <= (width + 2); i++)
-            {
-                Draw(i, 1, "-");
-            }
-            for (int i = 1; i <= (width + 2); i++)
-            {
-                Draw(i, (heigth + 2), "-");
-            }
-            for (int i = 1; i <= (heigth + 1); i++)
-            {
-                Draw(1, i, "|");
-            }
-            for (int i = 1; i <= (heigth + 1); i++)
-            {
-                Draw((width + 2), i, "|");
-            }
-        }
-        public void Fruit()
-        {
-            if (X[0] == fruitX)
-            {
-                if (Y[0] == fruitY)
-                {
-                    parts++;
-                    score++;
-                    fruitX = rnd.Next(2, (width - 2));
-                    fruitY = rnd.Next(2, (width - 2));
-                    wall_triger = true;
-                    Timer();
-                }
-            }
-        }
-        public void SnakePartsAndMove()
-        {
-            for (int i = parts; i > 1; i--)
-            {
-                X[i - 1] = X[i - 2];
-                Y[i - 1] = Y[i - 2];
             }
         }
         public void KeyPress()
@@ -172,13 +132,39 @@ namespace Snake
                     break;
             }
         }
-        public void SnakeFruitTpDraw()
+        public void MapBorder()
         {
-            for (int i = 0; i <= (parts - 1); i++)
+            for (int i = 1; i <= (Width + 2); i++)
             {
-                Draw(X[i], Y[i], "#");
-                Draw(fruitX, fruitY, "O");
-                CheckTp(X[i], Y[i]);
+                draw(i, 1, "-");
+            }
+            for (int i = 1; i <= (Width + 2); i++)
+            {
+                draw(i, (Heigth + 2), "-");
+            }
+            for (int i = 1; i <= (Heigth + 1); i++)
+            {
+                draw(1, i, "|");
+            }
+            for (int i = 1; i <= (Heigth + 1); i++)
+            {
+                draw((Width + 2), i, "|");
+            }
+        }
+        public void Fruit()
+        {
+            if (X[0] == fruitX)
+            {
+                if (Y[0] == fruitY)
+                {
+                    parts++;
+                    score++;
+                    fruitX = rnd.Next(2, (Width - 2));
+                    fruitY = rnd.Next(2, (Heigth - 2));
+                    wall_triger = true;
+                    Timer();
+                    StopWatch.Restart();
+                }
             }
         }
         public void Input()
@@ -187,6 +173,23 @@ namespace Snake
             {
                 keyInfo = Console.ReadKey(true);
                 key = keyInfo.KeyChar;
+            }
+        }
+        public void SnakePartsAndMove()
+        {
+            for (int i = parts; i > 1; i--)
+            {
+                X[i - 1] = X[i - 2];
+                Y[i - 1] = Y[i - 2];
+            }
+        }
+        public void SnakeFruitTpDraw()
+        {
+            for (int i = 0; i <= (parts - 1); i++)
+            {
+                draw(X[i], Y[i], "#");
+                draw(fruitX, fruitY, "O");
+                Check_TP(X[i], Y[i]);
             }
         }
         public void Logic()
@@ -202,7 +205,7 @@ namespace Snake
             TheWall();
             Thread.Sleep(100);
         }
-        public void Draw(int x,int y,string symbol)
+        public void draw(int x, int y, string symbol)
         {
             Console.SetCursorPosition(x, y);
             Console.Write(symbol);
@@ -210,7 +213,7 @@ namespace Snake
         static void Main(string[] args)
         {
             Snake snake = new Snake();
-            while (snake.gamelouse == false)
+            while (snake.Gamelouse == false)
             {
                 snake.Input();
                 snake.Logic();

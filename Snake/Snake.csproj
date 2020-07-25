@@ -4,6 +4,16 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon>51xFNyqVmJL.ico</ApplicationIcon>
+    <StartupObject>Snake.Snake</StartupObject>
+    <Authors>Yaroslav Youshchenko</Authors>
+    <Product>Console Snake</Product>
+    <PackageProjectUrl>https://github.com/Jaroslav01/Snake_console</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Jaroslav01/Snake_console</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
 
 </Project>
