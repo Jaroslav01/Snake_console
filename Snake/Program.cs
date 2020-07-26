@@ -1,8 +1,5 @@
 using System;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using System.Globalization;
-using System.Collections.Generic;
 using System.Diagnostics;
 namespace Snake
 {
@@ -50,25 +47,25 @@ namespace Snake
                 case 0:
                     for (int i = 0; i < size && x_wall + i >= Heigth; i++)
                     {
-                        draw(x_wall + i, y_wall, "#");
+                        Draw(x_wall + i, y_wall, "#");
                     }
                     break;
                 case 1:
                     for (int i = 0; i < size && x_wall - i >= Heigth; i++)
                     {
-                        draw(x_wall - i, y_wall, "#");
+                        Draw(x_wall - i, y_wall, "#");
                     }
                     break;
                 case 2:
                     for (int i = 0; i < size && x_wall + i >= Width; i++)
                     {
-                        draw(x_wall, y_wall + i, "#");
+                        Draw(x_wall, y_wall + i, "#");
                     }
                     break;
                 case 3:
                     for (int i = 0; i < size && x_wall - i >= Width; i++)
                     {
-                        draw(x_wall, y_wall - i, "#");
+                        Draw(x_wall, y_wall - i, "#");
                     }
                     break;
             }
@@ -84,10 +81,10 @@ namespace Snake
             TimeSpan ts = StopWatch.Elapsed;
             for (int i = 0; i < score; i++)
             {
-                draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
+                Draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
             }
-            draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
-            draw(90, 5, $"SCORE: {score}");
+            Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
+            Draw(90, 5, $"SCORE: {score}");
         }
         public void Check_TP(int x, int y) // check border touch
         {
@@ -136,19 +133,19 @@ namespace Snake
         {
             for (int i = 1; i <= (Width + 2); i++)
             {
-                draw(i, 1, "-");
+                Draw(i, 1, "-");
             }
             for (int i = 1; i <= (Width + 2); i++)
             {
-                draw(i, (Heigth + 2), "-");
+                Draw(i, (Heigth + 2), "-");
             }
             for (int i = 1; i <= (Heigth + 1); i++)
             {
-                draw(1, i, "|");
+                Draw(1, i, "|");
             }
             for (int i = 1; i <= (Heigth + 1); i++)
             {
-                draw((Width + 2), i, "|");
+                Draw((Width + 2), i, "|");
             }
         }
         public void Fruit()
@@ -187,8 +184,8 @@ namespace Snake
         {
             for (int i = 0; i <= (parts - 1); i++)
             {
-                draw(X[i], Y[i], "#");
-                draw(fruitX, fruitY, "O");
+                Draw(X[i], Y[i], "#");
+                Draw(fruitX, fruitY, "O");
                 Check_TP(X[i], Y[i]);
             }
         }
@@ -205,7 +202,7 @@ namespace Snake
             TheWall();
             Thread.Sleep(100);
         }
-        public void draw(int x, int y, string symbol)
+        public void Draw(int x, int y, string symbol)
         {
             Console.SetCursorPosition(x, y);
             Console.Write(symbol);
@@ -222,3 +219,10 @@ namespace Snake
         }
     }
 }
+/*
+ *  Доработать стену
+ *  убрат мерцание
+ *  Добавить блокировку розворота на 180
+ *  Проиграт если укусил себя или стену
+ *  Ограничения СтопВотч (что б не вылазил за край окна)
+ */
