@@ -107,27 +107,23 @@ namespace Snake
         }
         public void KeyPress()
         {
-            switch (key)
+            if (key == 'w')
             {
-                case 'w':
-                    Y[0]--;
-                    break;
-                case 's':
-                    Y[0]++;
-                    break;
-                case 'd':
-                    X[0]++;
-                    break;
-                case 'a':
-                    X[0]--;
-                    break;
-                case '+':
-                    parts++;
-                    break;
-                case '-':
-                    parts--;
-                    break;
+                Y[0]--;
             }
+            else if (key == 's')
+            {
+                Y[0]++;
+            }
+            else if (key == 'd')
+            {
+                X[0]++;
+            }
+            else if (key == 'a')
+            {
+                X[0]--;
+            }
+            Console.Write(key);
         }
         public void MapBorder()
         {
@@ -164,14 +160,6 @@ namespace Snake
                 }
             }
         }
-        public void Input()
-        {
-            if (Console.KeyAvailable)
-            {
-                keyInfo = Console.ReadKey(true);
-                key = keyInfo.KeyChar;
-            }
-        }
         public void SnakePartsAndMove()
         {
             for (int i = parts; i > 1; i--)
@@ -189,6 +177,24 @@ namespace Snake
                 Check_TP(X[i], Y[i]);
             }
         }
+        public void GameOver(int[] X, int[] Y)
+        {
+            for (int i = 3; (i < X.Length - 1 || i < Y.Length - 1); i++)
+            {
+                if (X[0] == X[i + 1] && Y[0] == Y[i + 1])
+                {
+                    Gamelouse = true;
+                }
+            }
+        }
+        public void Input()
+        {
+            if (Console.KeyAvailable)
+            {
+                keyInfo = Console.ReadKey(true);
+                key = keyInfo.KeyChar;
+            }
+        }
         public void Logic()
         {
             Console.Clear();
@@ -200,6 +206,7 @@ namespace Snake
             SnakeFruitTpDraw();
             TimerDrawAndScore();
             TheWall();
+            GameOver(X,Y);
             Thread.Sleep(100);
         }
         public void Draw(int x, int y, string symbol)
@@ -215,6 +222,7 @@ namespace Snake
                 snake.Input();
                 snake.Logic();
             }
+            Console.WriteLine("GameOver");
             Console.ReadKey();
         }
     }
@@ -223,6 +231,8 @@ namespace Snake
  *  Доработать стену
  *  убрат мерцание
  *  Добавить блокировку розворота на 180
- *  Проиграт если укусил себя или стену
+ *  Проиграт если укусил себя или стену +++++
  *  Ограничения СтопВотч (что б не вылазил за край окна)
+ *  TheWall в отрисовку TimerDrawAndScore();
+ *  Узнать почему switch работает не так как иф
  */
