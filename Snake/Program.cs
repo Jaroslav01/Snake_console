@@ -48,24 +48,28 @@ namespace Snake
                     for (int i = 0; i < size && x_wall + i >= Heigth; i++)
                     {
                         Draw(x_wall + i, y_wall, "#");
+                        GameOver(1, x_wall + i, y_wall);
                     }
                     break;
                 case 1:
                     for (int i = 0; i < size && x_wall - i >= Heigth; i++)
                     {
                         Draw(x_wall - i, y_wall, "#");
+                        GameOver(1, x_wall - i, y_wall);
                     }
                     break;
                 case 2:
                     for (int i = 0; i < size && x_wall + i >= Width; i++)
                     {
                         Draw(x_wall, y_wall + i, "#");
+                        GameOver(1, x_wall, y_wall + i);
                     }
                     break;
                 case 3:
                     for (int i = 0; i < size && x_wall - i >= Width; i++)
                     {
                         Draw(x_wall, y_wall - i, "#");
+                        GameOver(1, x_wall, y_wall - i);
                     }
                     break;
             }
@@ -76,12 +80,18 @@ namespace Snake
             int score_local = score;
             time_history[score_local - 1] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
         }
+        int mesto = 20;
         public void TimerDrawAndScore()
         {
             TimeSpan ts = StopWatch.Elapsed;
             for (int i = 0; i < score; i++)
             {
                 Draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
+                if (i == mesto)
+                {
+                    i = 0;
+                    mesto += 20;
+                }
             }
             Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
             Draw(90, 5, $"SCORE: {score}");
@@ -177,13 +187,24 @@ namespace Snake
                 Check_TP(X[i], Y[i]);
             }
         }
-        public void GameOver(int[] X, int[] Y)
+        public void GameOver(int zerone,int x, int y)
         {
             for (int i = 3; (i < X.Length - 1 || i < Y.Length - 1); i++)
             {
-                if (X[0] == X[i + 1] && Y[0] == Y[i + 1])
+                switch (zerone)
                 {
-                    Gamelouse = true;
+                    case 0:
+                        if (X[0] == X[i + 1] && Y[0] == Y[i + 1])
+                        {
+                            Gamelouse = true;
+                        }
+                        break;
+                    case 1:
+                        if (X[0] == x && Y[0] == y)
+                        {
+                            Gamelouse = true;
+                        }
+                        break;
                 }
             }
         }
@@ -206,7 +227,7 @@ namespace Snake
             SnakeFruitTpDraw();
             TimerDrawAndScore();
             TheWall();
-            GameOver(X,Y);
+            GameOver(0,0,0);
             Thread.Sleep(100);
         }
         public void Draw(int x, int y, string symbol)
@@ -230,9 +251,10 @@ namespace Snake
 /*
  *  Доработать стену
  *  убрат мерцание
+ *  
  *  Добавить блокировку розворота на 180
- *  Проиграт если укусил себя или стену +++++
  *  Ограничения СтопВотч (что б не вылазил за край окна)
  *  TheWall в отрисовку TimerDrawAndScore();
+ *  
  *  Узнать почему switch работает не так как иф
  */
