@@ -24,6 +24,7 @@ namespace Snake
         int fruitY;
         int parts = 3;
         char key = 'W';
+        int a = 0;
         Snake()
         {
             X[0] = 5;
@@ -80,18 +81,13 @@ namespace Snake
             int score_local = score;
             time_history[score_local - 1] = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
         }
-        int mesto = 20;
         public void TimerDrawAndScore()
         {
             TimeSpan ts = StopWatch.Elapsed;
-            for (int i = 0; i < score; i++)
+            for (int i = 0; i < a; i++)
             {
-                Draw(90, 8 + i, $"{i + 1} - {time_history[i]}");
-                if (i == mesto)
-                {
-                    i = 0;
-                    mesto += 20;
-                }
+                if (i == 15) a=1;
+                Draw(90, 8 + i, $"{score} - {time_history[i]}");
             }
             Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
             Draw(90, 5, $"SCORE: {score}");
@@ -162,6 +158,7 @@ namespace Snake
                 {
                     parts++;
                     score++;
+                    a++;
                     fruitX = rnd.Next(2, (Width - 2));
                     fruitY = rnd.Next(2, (Heigth - 2));
                     wall_triger = true;
@@ -253,7 +250,6 @@ namespace Snake
  *  убрат мерцание
  *  
  *  Добавить блокировку розворота на 180
- *  Ограничения СтопВотч (что б не вылазил за край окна)
  *  TheWall в отрисовку TimerDrawAndScore();
  *  
  *  Узнать почему switch работает не так как иф
