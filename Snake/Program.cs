@@ -1,6 +1,10 @@
 using System;
 using System.Threading;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using System.Data.SqlClient;
+using System.Data;
+using System.Text;
 namespace Snake
 {
     class Snake
@@ -23,8 +27,12 @@ namespace Snake
         int fruitX;
         int fruitY;
         int parts = 3;
-        char key = 'W';
+        char key = 'a'; 
         int a = 0;
+
+        int last_x_wall = 10;
+        int last_y_wall = 10;
+        int last_direction = 1;
         Snake()
         {
             X[0] = 5;
@@ -35,42 +43,55 @@ namespace Snake
         }
         public void TheWall()
         {
-            while (wall_triger == true)
+            if (wall_triger == true)
             {
                 wall_triger = false;
-                x_wall = rnd.Next(5, Width - 1);
-                y_wall = rnd.Next(5, Heigth - 1);
-                direction = rnd.Next(0, 4);
+                x_wall = rnd.Next(10, Width - 10);
+                y_wall = rnd.Next(10, Heigth - 10);
+                direction = rnd.Next(0, 2);
                 size = rnd.Next(5, 20);
             }
+            if (score%2==0)
+            {
+                last_x_wall = x_wall;
+                last_y_wall = y_wall;
+                last_direction = direction;
+            }
+        }
+        public void TheWallDraw() {  
             switch (direction)
             {
                 case 0:
-                    for (int i = 0; i < size && x_wall + i >= Heigth; i++)
+                    for (int i = 1; i < Heigth+2; i++)
                     {
-                        Draw(x_wall + i, y_wall, "#");
-                        GameOver(1, x_wall + i, y_wall);
+                        Draw(x_wall, i, "#");
+                        GameOver(1, x_wall,i);
+
                     }
                     break;
                 case 1:
-                    for (int i = 0; i < size && x_wall - i >= Heigth; i++)
+                    for (int i = 1; i < Width+2; i++)
                     {
-                        Draw(x_wall - i, y_wall, "#");
-                        GameOver(1, x_wall - i, y_wall);
+                        Draw(i, y_wall, "#");
+                        GameOver(1, i, y_wall);
                     }
                     break;
-                case 2:
-                    for (int i = 0; i < size && x_wall + i >= Width; i++)
+            }
+            switch (last_direction)
+            {
+                case 0:
+                    for (int i = 1; i < Heigth + 2; i++)
                     {
-                        Draw(x_wall, y_wall + i, "#");
-                        GameOver(1, x_wall, y_wall + i);
+                        Draw(last_x_wall, i, "#");
+                        GameOver(1, last_x_wall, i);
+
                     }
                     break;
-                case 3:
-                    for (int i = 0; i < size && x_wall - i >= Width; i++)
+                case 1:
+                    for (int i = 1; i < Width + 2; i++)
                     {
-                        Draw(x_wall, y_wall - i, "#");
-                        GameOver(1, x_wall, y_wall - i);
+                        Draw(i, last_y_wall, "#");
+                        GameOver(1, i, last_y_wall);
                     }
                     break;
             }
@@ -84,11 +105,11 @@ namespace Snake
         public void TimerDrawAndScore()
         {
             TimeSpan ts = StopWatch.Elapsed;
-            for (int i = 0; i < a; i++)
-            {
-                if (i == 15) a=1;
-                Draw(90, 8 + i, $"{score} - {time_history[i]}");
-            }
+                for (int i = 0; i < a; i++)
+                {
+                    //if (i == 2) a = 1;
+                    Draw(90, 8 + i, $"{i} - {time_history[i]}");
+                }
             Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
             Draw(90, 5, $"SCORE: {score}");
         }
@@ -143,11 +164,11 @@ namespace Snake
             }
             for (int i = 1; i <= (Heigth + 1); i++)
             {
-                Draw(1, i, "|");
+                Draw(1, i, "-");
             }
             for (int i = 1; i <= (Heigth + 1); i++)
             {
-                Draw((Width + 2), i, "|");
+                Draw((Width + 2), i, "-");
             }
         }
         public void Fruit()
@@ -161,6 +182,7 @@ namespace Snake
                     a++;
                     fruitX = rnd.Next(2, (Width - 2));
                     fruitY = rnd.Next(2, (Heigth - 2));
+                    TheWall();
                     wall_triger = true;
                     Timer();
                     StopWatch.Restart();
@@ -223,7 +245,7 @@ namespace Snake
             KeyPress();
             SnakeFruitTpDraw();
             TimerDrawAndScore();
-            TheWall();
+            TheWallDraw();
             GameOver(0,0,0);
             Thread.Sleep(100);
         }
@@ -246,11 +268,14 @@ namespace Snake
     }
 }
 /*
- *  Доработать стену
  *  убрат мерцание
  *  
  *  Добавить блокировку розворота на 180
  *  TheWall в отрисовку TimerDrawAndScore();
  *  
- *  Узнать почему switch работает не так как иф
+ *  
+ *  показивать где будет новая стена что  б игрок убрал хвост змеи из под стени иначе змею розрубит(
+ *  добавить монетки которые убирают стену
+и даються 5шт в день
+
  */
