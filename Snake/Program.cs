@@ -1,10 +1,6 @@
 using System;
-using System.Threading;
 using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
-using System.Data.SqlClient;
-using System.Data;
-using System.Text;
+using System.Threading;
 namespace Snake
 {
     class Snake
@@ -20,19 +16,18 @@ namespace Snake
         int[] X = new int[50];
         int[] Y = new int[50];
         bool wall_triger = true; // запускает вибор параметров стены
-        int x_wall = 0;
-        int y_wall = 0;
-        int direction = 0; // Направление
+        int[] x_wall = new int[6];
+        int[] y_wall = new int[6];
+        int[] direction = new int[2];
+        //int direction = 0; // Направление
         int size = 0; // Длина стены
         int fruitX;
         int fruitY;
         int parts = 3;
-        char key = 'a'; 
+        char key = 'a';
         int a = 0;
 
-        int last_x_wall = 10;
-        int last_y_wall = 10;
-        int last_direction = 1;
+
         Snake()
         {
             X[0] = 5;
@@ -45,56 +40,58 @@ namespace Snake
         {
             if (wall_triger == true)
             {
+
+                x_wall[1] = x_wall[0];
+                y_wall[1] = y_wall[0];
+                direction[1] = direction[0];
                 wall_triger = false;
-                x_wall = rnd.Next(10, Width - 10);
-                y_wall = rnd.Next(10, Heigth - 10);
-                direction = rnd.Next(0, 2);
+                x_wall[0] = rnd.Next(10, Width - 10);
+                y_wall[0] = rnd.Next(10, Heigth - 10);
+                direction[0] = rnd.Next(0, 2);
                 size = rnd.Next(5, 20);
             }
-            if (score%2==0)
-            {
-                last_x_wall = x_wall;
-                last_y_wall = y_wall;
-                last_direction = direction;
-            }
         }
-        public void TheWallDraw() {  
-            switch (direction)
-            {
-                case 0:
-                    for (int i = 1; i < Heigth+2; i++)
-                    {
-                        Draw(x_wall, i, "#");
-                        GameOver(1, x_wall,i);
-
-                    }
-                    break;
-                case 1:
-                    for (int i = 1; i < Width+2; i++)
-                    {
-                        Draw(i, y_wall, "#");
-                        GameOver(1, i, y_wall);
-                    }
-                    break;
-            }
-            switch (last_direction)
+        public void TheWallDraw()
+        {
+            switch (direction[0])
             {
                 case 0:
                     for (int i = 1; i < Heigth + 2; i++)
                     {
-                        Draw(last_x_wall, i, "#");
-                        GameOver(1, last_x_wall, i);
+                        if (i > 3 && i < Width - 1) continue;
+                        Draw(x_wall[0], i, "#");
+                        GameOver(1, x_wall[0], i);
+                    }
+                    break;
+                case 1:
+                    for (int i = 1; i < Width + 2; i++)
+                    {
+                        if (i > 3 && i < Width - 1) continue;
+                        Draw(i, y_wall[0], "#");
+                        GameOver(1, i, y_wall[0]);
+                    }
+                    break;
+            }
+            switch (direction[1])
+            {
+                case 0:
+                    for (int i = 1; i < Heigth + 2; i++)
+                    {
+                        Draw(x_wall[1], i, "#");
+                        GameOver(1, x_wall[1], i);
 
                     }
                     break;
                 case 1:
                     for (int i = 1; i < Width + 2; i++)
                     {
-                        Draw(i, last_y_wall, "#");
-                        GameOver(1, i, last_y_wall);
+                        Draw(i, y_wall[1], "#");
+                        GameOver(1, i, y_wall[1]);
                     }
                     break;
             }
+           
+
         }
         public void Timer()
         {
@@ -105,11 +102,11 @@ namespace Snake
         public void TimerDrawAndScore()
         {
             TimeSpan ts = StopWatch.Elapsed;
-                for (int i = 0; i < a; i++)
-                {
-                    //if (i == 2) a = 1;
-                    Draw(90, 8 + i, $"{i} - {time_history[i]}");
-                }
+            for (int i = 0; i < a; i++)
+            {
+                //if (i == 2) a = 1;
+                Draw(90, 8 + i, $"{i} - {time_history[i]}");
+            }
             Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
             Draw(90, 5, $"SCORE: {score}");
         }
@@ -206,7 +203,7 @@ namespace Snake
                 Check_TP(X[i], Y[i]);
             }
         }
-        public void GameOver(int zerone,int x, int y)
+        public void GameOver(int zerone, int x, int y)
         {
             for (int i = 3; (i < X.Length - 1 || i < Y.Length - 1); i++)
             {
@@ -246,7 +243,7 @@ namespace Snake
             SnakeFruitTpDraw();
             TimerDrawAndScore();
             TheWallDraw();
-            GameOver(0,0,0);
+            GameOver(0, 0, 0);
             Thread.Sleep(100);
         }
         public void Draw(int x, int y, string symbol)
