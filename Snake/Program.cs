@@ -38,7 +38,7 @@ namespace Snake
         }
         public void TheWall()
         {
-            if (wall_triger == true)
+            if (wall_triger == true || x_wall[0] == x_wall[1] || y_wall[0] == y_wall[1])
             {
 
                 x_wall[1] = x_wall[0];
