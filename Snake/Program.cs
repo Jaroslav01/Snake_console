@@ -31,8 +31,6 @@ namespace Snake
             X[0] = 5;
             Y[0] = 5;
             Console.CursorVisible = false;
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            Console.ForegroundColor = ConsoleColor.White;
             fruitX = rnd.Next(2, (Width - 2));
             fruitY = rnd.Next(2, (Heigth - 2));
         }
@@ -52,7 +50,7 @@ namespace Snake
         }
         public void TheWallDraw()
         {
-            if (x_wall[0] == x_wall[1] || y_wall[0] == y_wall[1])
+            if (x_wall[0] == x_wall[1] && y_wall[0] == y_wall[1])
             {
                 x_wall[0] = x_wall[0] + 5;
                 y_wall[0] = y_wall[0] + 5;
@@ -218,7 +216,7 @@ namespace Snake
                         }
                         break;
                     case 1:
-                        if (X[0] == x && Y[0] == y)
+                        if (X[i-3] == x && Y[i-3] == y)
                         {
                             Gamelouse = true;
                         }
