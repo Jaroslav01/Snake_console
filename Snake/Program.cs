@@ -26,19 +26,19 @@ namespace Snake
         int parts = 3;
         char key = 'a';
         int a = 0;
-
-
         Snake()
         {
             X[0] = 5;
             Y[0] = 5;
             Console.CursorVisible = false;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.White;
             fruitX = rnd.Next(2, (Width - 2));
             fruitY = rnd.Next(2, (Heigth - 2));
         }
         public void TheWall()
         {
-            if (wall_triger == true || x_wall[0] == x_wall[1] || y_wall[0] == y_wall[1])
+            if (wall_triger == true)
             {
                 x_wall[1] = x_wall[0];
                 y_wall[1] = y_wall[0];
@@ -52,6 +52,11 @@ namespace Snake
         }
         public void TheWallDraw()
         {
+            if (x_wall[0] == x_wall[1] || y_wall[0] == y_wall[1])
+            {
+                x_wall[0] = x_wall[0] + 5;
+                y_wall[0] = y_wall[0] + 5;
+            }
             switch (direction[0])
             {
                 case 0:
@@ -89,8 +94,6 @@ namespace Snake
                     }
                     break;
             }
-           
-
         }
         public void Timer()
         {
@@ -258,6 +261,7 @@ namespace Snake
                 snake.Input();
                 snake.Logic();
             }
+            Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("GameOver");
             Console.ReadKey();
         }
