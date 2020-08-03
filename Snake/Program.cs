@@ -62,7 +62,6 @@ namespace Snake
                     {
                         if (i > 3 && i < Width - 1) continue;
                         Draw(x_wall[0], i, "#");
-                        GameOver(1, x_wall[0], i);
                     }
                     break;
                 case 1:
@@ -70,7 +69,6 @@ namespace Snake
                     {
                         if (i > 3 && i < Width - 1) continue;
                         Draw(i, y_wall[0], "#");
-                        GameOver(1, i, y_wall[0]);
                     }
                     break;
             }
@@ -81,7 +79,6 @@ namespace Snake
                     {
                         Draw(x_wall[1], i, "#");
                         GameOver(1, x_wall[1], i);
-
                     }
                     break;
                 case 1:
