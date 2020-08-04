@@ -179,6 +179,11 @@ namespace Snake
                     StopWatch.Restart();
                 }
             }
+            if (x_wall[0] == fruitX && y_wall[0] == fruitY)
+            {
+                fruitY++;
+                fruitX++;
+            }
         }
         public void SnakePartsAndMove()
         {
@@ -259,15 +264,3 @@ namespace Snake
         }
     }
 }
-/*
- *  убрат мерцание
- *  
- *  Добавить блокировку розворота на 180
- *  TheWall в отрисовку TimerDrawAndScore();
- *  
- *  
- *  показивать где будет новая стена что  б игрок убрал хвост змеи из под стени иначе змею розрубит(
- *  добавить монетки которые убирают стену
-и даються 5шт в день
-
- */
