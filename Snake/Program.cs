@@ -15,12 +15,10 @@ namespace Snake
         int score = 0;
         int[] X = new int[50];
         int[] Y = new int[50];
-        bool wall_triger = true; // запускает вибор параметров стены
+        bool wall_triger = true; // запускает вибор параметров 
         int[] x_wall = new int[6];
         int[] y_wall = new int[6];
         int[] direction = new int[2];
-        //int direction = 0; // Направление
-        int size = 0; // Длина стены
         int fruitX;
         int fruitY;
         int parts = 3;
@@ -45,7 +43,6 @@ namespace Snake
                 x_wall[0] = rnd.Next(10, Width - 10);
                 y_wall[0] = rnd.Next(10, Heigth - 10);
                 direction[0] = rnd.Next(0, 2);
-                size = rnd.Next(5, 20);
             }
         }
         public void TheWallDraw()
@@ -60,7 +57,7 @@ namespace Snake
                 case 0:
                     for (int i = 1; i < Heigth + 2; i++)
                     {
-                        if (i > 3 && i < Width - 1) continue;
+                        if (i > 3 && i < Heigth - 1) continue;
                         Draw(x_wall[0], i, "#");
                     }
                     break;
