@@ -145,7 +145,6 @@ namespace Snake
             {
                 X[0]--;
             }
-            Console.Write(key);
         }
         public void MapBorder()
         {
@@ -178,6 +177,7 @@ namespace Snake
                     fruitX = rnd.Next(2, (Width - 2));
                     fruitY = rnd.Next(2, (Heigth - 2));
                     TheWall();
+                    TheWallDraw("#");
                     wall_triger = true;
                     Timer();
                     StopWatch.Restart();
@@ -242,7 +242,7 @@ namespace Snake
             KeyPress();
             SnakeFruitTpDraw();
             TimerDrawAndScore();
-            TheWallDraw("#");
+            
             GameOver(0, 0, 0);
             Thread.Sleep(100);
         }
