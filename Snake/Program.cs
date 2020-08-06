@@ -1,11 +1,14 @@
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Threading;
+
 namespace Snake
 {
     class Snake
     {
-        Stopwatch StopWatch = new Stopwatch();
+    string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    Stopwatch StopWatch = new Stopwatch();
         ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
         Random rnd = new Random();
         string[] time_history = new string[50];
@@ -43,6 +46,7 @@ namespace Snake
                 x_wall[0] = rnd.Next(10, Width - 10);
                 y_wall[0] = rnd.Next(10, Heigth - 10);
                 direction[0] = rnd.Next(0, 2);
+                Console.Clear();
             }
         }
         public void TheWallDraw()
@@ -98,7 +102,6 @@ namespace Snake
             TimeSpan ts = StopWatch.Elapsed;
             for (int i = 0; i < a; i++)
             {
-                //if (i == 2) a = 1;
                 Draw(90, 8 + i, $"{i} - {time_history[i]}");
             }
             Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
@@ -114,13 +117,13 @@ namespace Snake
             {
                 X[0] = 1;
             }
-            else if (y == 0)
+            else if (y == 1)
             {
                 Y[0] = Heigth;
             }
             else if (y == Heigth + 1)
             {
-                Y[0] = 1;
+                Y[0] = 2;
             }
         }
         public void KeyPress()
@@ -179,11 +182,6 @@ namespace Snake
                     StopWatch.Restart();
                 }
             }
-            if (x_wall[0] == fruitX && y_wall[0] == fruitY)
-            {
-                fruitY++;
-                fruitX++;
-            }
         }
         public void SnakePartsAndMove()
         {
@@ -191,6 +189,7 @@ namespace Snake
             {
                 X[i - 1] = X[i - 2];
                 Y[i - 1] = Y[i - 2];
+                
             }
         }
         public void SnakeFruitTpDraw()
@@ -198,6 +197,7 @@ namespace Snake
             for (int i = 0; i <= (parts - 1); i++)
             {
                 Draw(X[i], Y[i], "#");
+                Draw(X[parts-1], Y[parts-1], " ");
                 Draw(fruitX, fruitY, "O");
                 Check_TP(X[i], Y[i]);
             }
@@ -233,7 +233,7 @@ namespace Snake
         }
         public void Logic()
         {
-            Console.Clear();
+           // Console.Clear();
             StopWatch.Start();
             MapBorder();
             Fruit();
@@ -264,3 +264,18 @@ namespace Snake
         }
     }
 }
+/*
+ * мерцание
+ * 
+ * граныцу подкоректировать
+ * 
+ * букву д убрать
+ * 
+ * максимальный рекорд в файл
+ * 
+ * Прочиттать про файлы
+ * 
+ * ооп, функцыональное, и процедурное
+ * 
+ * 
+ */
