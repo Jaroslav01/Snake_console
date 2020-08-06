@@ -39,6 +39,7 @@ namespace Snake
         {
             if (wall_triger == true)
             {
+                TheWallDraw(" ");
                 x_wall[1] = x_wall[0];
                 y_wall[1] = y_wall[0];
                 direction[1] = direction[0];
@@ -46,10 +47,10 @@ namespace Snake
                 x_wall[0] = rnd.Next(10, Width - 10);
                 y_wall[0] = rnd.Next(10, Heigth - 10);
                 direction[0] = rnd.Next(0, 2);
-                Console.Clear();
+                //Console.Clear();
             }
         }
-        public void TheWallDraw()
+        public void TheWallDraw(string symbol)
         {
             if (x_wall[0] == x_wall[1] && y_wall[0] == y_wall[1])
             {
@@ -62,14 +63,14 @@ namespace Snake
                     for (int i = 1; i < Heigth + 2; i++)
                     {
                         if (i > 3 && i < Heigth - 1) continue;
-                        Draw(x_wall[0], i, "#");
+                        Draw(x_wall[0], i, symbol);
                     }
                     break;
                 case 1:
                     for (int i = 1; i < Width + 2; i++)
                     {
                         if (i > 3 && i < Width - 1) continue;
-                        Draw(i, y_wall[0], "#");
+                        Draw(i, y_wall[0], symbol);
                     }
                     break;
             }
@@ -78,14 +79,14 @@ namespace Snake
                 case 0:
                     for (int i = 1; i < Heigth + 2; i++)
                     {
-                        Draw(x_wall[1], i, "#");
+                        Draw(x_wall[1], i,symbol);
                         GameOver(1, x_wall[1], i);
                     }
                     break;
                 case 1:
                     for (int i = 1; i < Width + 2; i++)
                     {
-                        Draw(i, y_wall[1], "#");
+                        Draw(i, y_wall[1], symbol);
                         GameOver(1, i, y_wall[1]);
                     }
                     break;
@@ -241,7 +242,7 @@ namespace Snake
             KeyPress();
             SnakeFruitTpDraw();
             TimerDrawAndScore();
-            TheWallDraw();
+            TheWallDraw("#");
             GameOver(0, 0, 0);
             Thread.Sleep(100);
         }
