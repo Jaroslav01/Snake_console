@@ -92,6 +92,24 @@ namespace Snake
                     break;
             }
         }
+        public void Wall_gameover()
+        {
+            switch (direction[1])
+            {
+                case 0:
+                    for (int i = 1; i < Heigth + 2; i++)
+                    {
+                        GameOver(1, x_wall[1], i);
+                    }
+                    break;
+                case 1:
+                    for (int i = 1; i < Width + 2; i++)
+                    {
+                        GameOver(1, i, y_wall[1]);
+                    }
+                    break;
+            }
+    }
         public void Timer()
         {
             TimeSpan ts = StopWatch.Elapsed;
@@ -110,19 +128,19 @@ namespace Snake
         }
         public void Check_TP(int x, int y) // check border touch
         {
-            if (x == 0)
+            if (x == 1)
             {
                 X[0] = Width;
             }
-            else if (x == Width + 1)
+            else if (x == Width + 2)
             {
-                X[0] = 1;
+                X[0] = 2;
             }
             else if (y == 1)
             {
                 Y[0] = Heigth;
             }
-            else if (y == Heigth + 1)
+            else if (y == Heigth+2)
             {
                 Y[0] = 2;
             }
@@ -242,7 +260,7 @@ namespace Snake
             KeyPress();
             SnakeFruitTpDraw();
             TimerDrawAndScore();
-            
+            Wall_gameover();
             GameOver(0, 0, 0);
             Thread.Sleep(100);
         }
@@ -266,12 +284,6 @@ namespace Snake
     }
 }
 /*
- * мерцание
- * 
- * граныцу подкоректировать
- * 
- * букву д убрать
- * 
  * максимальный рекорд в файл
  * 
  * Прочиттать про файлы
