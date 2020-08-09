@@ -26,6 +26,7 @@ namespace Snake
         int fruitY;
         int parts = 3;
         char key = 'a';
+        int kay_misstap;
         int a = 0;
         Snake()
         {
@@ -62,14 +63,14 @@ namespace Snake
                 case 0:
                     for (int i = 1; i < Heigth + 2; i++)
                     {
-                        if (i > 3 && i < Heigth - 1) continue;
+                        if (i > 3 && i <= Heigth - 1) continue;
                         Draw(x_wall[0], i, symbol);
                     }
                     break;
                 case 1:
                     for (int i = 1; i < Width + 2; i++)
                     {
-                        if (i > 3 && i < Width - 1) continue;
+                        if (i > 3 && i <= Width - 1) continue;
                         Draw(i, y_wall[0], symbol);
                     }
                     break;
@@ -90,8 +91,8 @@ namespace Snake
                         GameOver(1, i, y_wall[1]);
                     }
                     break;
-            }
         }
+            }
         public void Wall_gameover()
         {
             switch (direction[1])
@@ -121,7 +122,7 @@ namespace Snake
             TimeSpan ts = StopWatch.Elapsed;
             for (int i = 0; i < a; i++)
             {
-                Draw(90, 8 + i, $"{i} - {time_history[i]}");
+                Draw(90, 9 + i, $"{i} - {time_history[i]}");
             }
             Draw(100, 5, $"{String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
             Draw(90, 5, $"SCORE: {score}");
@@ -147,21 +148,27 @@ namespace Snake
         }
         public void KeyPress()
         {
-            if (key == 'w')
+            if (key == 'w' || key == 'ц')
             {
                 Y[0]--;
             }
-            else if (key == 's')
+            else if (key == 's' || key == 'і' || key == 'ы')
             {
                 Y[0]++;
             }
-            else if (key == 'd')
+            else if (key == 'd' || key == 'в')
             {
                 X[0]++;
             }
-            else if (key == 'a')
+            else if (key == 'a' || key == 'ф')
             {
                 X[0]--;
+            }
+            else {
+                kay_misstap++;
+                string kay_misstap_string = kay_misstap.ToString();
+                Draw(90,7,$"Miss click {kay_misstap_string}");
+                key = 'w';
             }
         }
         public void MapBorder()
@@ -269,6 +276,12 @@ namespace Snake
             Console.SetCursorPosition(x, y);
             Console.Write(symbol);
         }
+        public void AfterGame()
+        {
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("GameOver");
+            Console.ReadKey();
+        }
         static void Main(string[] args)
         {
             Snake snake = new Snake();
@@ -277,9 +290,7 @@ namespace Snake
                 snake.Input();
                 snake.Logic();
             }
-            Console.BackgroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("GameOver");
-            Console.ReadKey();
+            snake.AfterGame();
         }
     }
 }
