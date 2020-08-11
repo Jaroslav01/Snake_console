@@ -263,8 +263,8 @@ namespace Snake
         {
             if (value > ReadFile(path))
             {
-                string score_string = score.ToString();
-                File.WriteAllText(path, score_string);
+                string value_string = value.ToString();
+                File.WriteAllText(path, value_string);
                 Console.ReadKey();
             }
         }
