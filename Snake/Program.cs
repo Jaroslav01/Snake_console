@@ -306,7 +306,7 @@ namespace Snake
             string score = ReadFile(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt").ToString();
             Draw(90, 2, $"Record - {score}");
             string missclick = ReadFile(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\missclick.txt").ToString();
-            Draw(102, 2, $"Max MissClicK - {missclick}");
+            Draw(90, 3, $"Max MissClicK - {missclick}");
         }
         static void Main(string[] args)
         { 
@@ -322,7 +322,6 @@ namespace Snake
     }
 }
 /*
- * максимальный рекорд в файл
  * 
  * Прочиттать про файлы
  * 
