@@ -265,7 +265,6 @@ namespace Snake
             {
                 string value_string = value.ToString();
                 File.WriteAllText(path, value_string);
-                Console.ReadKey();
             }
         }
         public void Input()
@@ -301,10 +300,18 @@ namespace Snake
             Console.WriteLine("GameOver");
             FileWriteScore(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt",score);
             FileWriteScore(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\missclick.txt",kay_misstap);
+            Console.ReadKey();
+        }
+        public void Records() { 
+            string score = ReadFile(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt").ToString();
+            Draw(90, 2, $"Record - {score}");
+            string missclick = ReadFile(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\missclick.txt").ToString();
+            Draw(110, 2, $"Max MissClick{missclick}");
         }
         static void Main(string[] args)
-        {
+        { 
             Snake snake = new Snake();
+            snake.Records();
             while (snake.Gamelouse == false)
             {
                 snake.Input();
