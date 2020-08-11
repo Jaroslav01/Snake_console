@@ -250,6 +250,24 @@ namespace Snake
                 }
             }
         }
+        public int ReadFile(string path)
+        {
+            using (TextReader reader = File.OpenText(path))
+            {
+                int x = int.Parse(reader.ReadLine());
+                reader.Close();
+                return x;
+            }
+        }
+        public void FileWriteScore(string path, int value)
+        {
+            if (value > ReadFile(path))
+            {
+                string score_string = score.ToString();
+                File.WriteAllText(path, score_string);
+                Console.ReadKey();
+            }
+        }
         public void Input()
         {
             if (Console.KeyAvailable)
@@ -281,18 +299,8 @@ namespace Snake
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("GameOver");
-            using (TextReader reader = File.OpenText(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt"))
-            {
-                int x = int.Parse(reader.ReadLine());
-                reader.Close();
-                if (score > x)
-                {
-                    string score_string = score.ToString();
-                    File.WriteAllText(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt", score_string);
-                    Console.ReadKey();
-                }
-            }
-            
+            FileWriteScore(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt",score);
+            FileWriteScore(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\missclick.txt",kay_misstap);
         }
         static void Main(string[] args)
         {
