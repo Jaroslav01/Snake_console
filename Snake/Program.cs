@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace Snake
 {
@@ -280,7 +281,18 @@ namespace Snake
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("GameOver");
-            Console.ReadKey();
+            using (TextReader reader = File.OpenText(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt"))
+            {
+                int x = int.Parse(reader.ReadLine());
+                reader.Close();
+                if (score > x)
+                {
+                    string score_string = score.ToString();
+                    File.WriteAllText(@"C:\Users\jaros\source\repos\Jaroslav01\Snake_console\Snake\score.txt", score_string);
+                    Console.ReadKey();
+                }
+            }
+            
         }
         static void Main(string[] args)
         {
